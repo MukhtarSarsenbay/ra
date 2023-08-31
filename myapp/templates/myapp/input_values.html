@@ -1,0 +1,74 @@
+{% load static %}  <!-- Make sure to load the static template tag -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Values</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        .long-input-container {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Input Values</h1>
+        <form method="post" class="input-form">
+            {% csrf_token %}
+            <div class="input-container">
+                <label for="quantity">Quantity of elements:</label>
+                <input type="number" name="Quantity of elements" id="quantity" required>
+            </div>
+
+            <div class="long-input-container">
+                <label for="values">Thetta_s:</label>
+                <input type="text" maxlength="1000" minlength="1" name="values" id="values" required>
+            </div>
+
+            <div class="long-input-container">
+                <label for="values1">Soil_suction:</label>
+                <input type="text" maxlength="1000" minlength="1"  name="values1" id="values1" required>
+            </div>
+
+            <div class="input-container">
+                <label for="a">Value of 'a':</label>
+                <input type="number" name="a" id="a" step="any" required>
+            </div>
+
+            <div class="input-container">
+                <label for="n">Value of 'n':</label>
+                <input type="number" name="n" id="n" step="any" required>
+            </div>
+
+            <div class="input-container">
+                <label for="m">Value of 'm':</label>
+                <input type="number" name="m" id="m" step="any" required>
+            </div>
+
+            <div class="input-container">
+                <label for="soil_suction_r">Value of 'soil_suction_r':</label>
+                <input type="number" name="soil_suction_r" id="soil_suction_r" step="any" required>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+        {% if water_content_image and derivation_image %}
+            <h2>Graphs</h2>
+            <div class="graphs-container">
+                <div class="graph">
+                    <img src="{{ water_content_image }}" alt="Water Content Graph">
+                    <p>Water Content Graph</p>
+                </div>
+                <div class="graph">
+                    <img src="{{ derivation_image }}" alt="Pore-Size Distribution Graph">
+                    <p>Pore-Size Distribution Graph</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
