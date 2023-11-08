@@ -5,10 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Output Graph</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
+
     <div class="container">
         <h1>Output Graph</h1>
         <div class="input-values">
@@ -18,34 +20,29 @@
             <p>Value of 'm': {{ m }}</p>
             <p>Value of 'soil_suction_r': {{ soil_suction_r }}</p>
         </div>
+        <div class="input-values">
+            <h2>Total error</h2>
+            <p>Value of 'error_sum': {{ error_sum }}</p>
+        </div>
         <div class="wanted-values">
             <h2>Optimal Values:</h2>
-            <p>Optimal value of 'optimal_a': {{ optimal_a }}</p>
-            <p>Optimal value of 'optimal_n': {{ optimal_n }}</p>
-            <p>Optimal value of 'optimal_m': {{ optimal_m }}</p>
-            <p>Optimal of 'optimal_soil_suction_r': {{ optimal_soil_suction_r }}</p>
+            <p>new a: {{ optimal_a }}</p>
+            <p>new n': {{ optimal_n }}</p>
+            <p>new m: {{ optimal_m }}</p>
+            <p>new ': {{ optimal_soil_suction_r }}</p>
         </div>
-            <h2>Graphs</h2>
-            <div class="graphs-container">
-                <div class="graph">
-                  <img src="{% static 'soil_water_characteristics_curve.png' %}" alt="Water Content Graph">
-                    <p>Water Content Graph</p>
-                </div>
-                <div class="graph">
-                  <img src="{% static 'pore_size_distribution.png' %}" alt="Pore-Size Distribution Graph">
-                    <p>Pore-Size Distribution Graph</p>
-                </div>
+            <div>
+                {{ swcc_div1|safe }}
             </div>
-            <div class="graphs-container">
-                <div class="graph">
-                  <img src="{% static 'optimal_soil_water_characteristics_curve.png' %}" alt="Water Content Graph">
-                    <p>Optimal Water Content Graph</p>
-                </div>
-                <div class="graph">
-                  <img src="{% static 'optimal_pore_size_distribution.png' %}" alt="Pore-Size Distribution Graph">
-                    <p>Optimal Pore-Size Distribution Graph</p>
-                </div>
+            <div>
+                {{ swcc_div|safe }}
             </div>
+            <div>
+                {{ psd_div|safe }}
+            </div>
+            <div>
+                {{ new_swcc_div|safe }}
+            </div>
+
 </body>
 </html>
-  

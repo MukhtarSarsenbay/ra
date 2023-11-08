@@ -4,58 +4,50 @@
 <head>
     <title>Input Values</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <style>
-        .input-container {
-            margin-bottom: 20px;
-        }
-
-        .long-input-container {
-            margin-bottom: 30px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <h1>Input Values</h1>
         <form method="post" class="input-form">
             {% csrf_token %}
-            <div class="input-container">
-                <label for="quantity">Quantity of elements:</label>
-                <input type="number" name="Quantity of elements" id="quantity" required>
-            </div>
 
-            <div class="long-input-container">
-                <label for="values">Thetta_s:</label>
+            <div class="input-container">
+                <select id="valuesSelect" name="values" class="custom-select">
+                    <option value="">Gravimetric Water Content:</option>
+                    <option value="values">Volumetric Water Content:</option>
+                    <option value="">Degree of Saturation:</option>
+                </select>
                 <input type="text" maxlength="1000" minlength="1" name="values" id="values" required>
             </div>
 
-            <div class="long-input-container">
-                <label for="values1">Soil_suction:</label>
-                <input type="text" maxlength="1000" minlength="1"  name="values1" id="values1" required>
+            <div class="input-container">
+                <label for="values1">Suction:</label>
+                <input type="text" maxlength="1000" minlength="1" name="values1" id="values1" required>
             </div>
 
             <div class="input-container">
-                <label for="a">Value of 'a':</label>
+                <label for="a">a:</label>
                 <input type="number" name="a" id="a" step="any" required>
             </div>
 
             <div class="input-container">
-                <label for="n">Value of 'n':</label>
+                <label for="n">n:</label>
                 <input type="number" name="n" id="n" step="any" required>
             </div>
 
             <div class="input-container">
-                <label for="m">Value of 'm':</label>
+                <label for="m">m:</label>
                 <input type="number" name="m" id="m" step="any" required>
             </div>
 
             <div class="input-container">
-                <label for="soil_suction_r">Value of 'soil_suction_r':</label>
+                <label for="soil_suction_r">Ψr:</label>
                 <input type="number" name="soil_suction_r" id="soil_suction_r" step="any" required>
             </div>
 
             <button type="submit">Submit</button>
         </form>
+
         {% if water_content_image and derivation_image %}
             <h2>Graphs</h2>
             <div class="graphs-container">
@@ -69,6 +61,44 @@
                 </div>
             </div>
         {% endif %}
+
+        <h1>Output Graph</h1>
+        <div class="input-values">
+            <h2>Input Values:</h2>
+            <p>Value of 'a': {{ a }}</p>
+            <p>Value of 'n': {{ n }}</p>
+            <p>Value of 'm': {{ m }}</p>
+            <p>Value of 'soil_suction_r': {{ soil_suction_r }}</p>
+        </div>
+
+        <div class="input-values">
+            <h2>Total error</h2>
+            <p>Value of 'error_sum': {{ error_sum }}</p>
+        </div>
+
+        <div class="wanted-values">
+            <h2>Optimal Values:</h2>
+            <p>new a: {{ optimal_a }}</p>
+            <p>new n': {{ optimal_n }}</p>
+            <p>new m: {{ optimal_m }}</p>
+            <p>new ': {{ optimal_soil_suction_r }}</p>
+        </div>
+
+        <div>
+            {{ swcc_div1|safe }}
+        </div>
+
+        <div>
+            {{ swcc_div|safe }}
+        </div>
+
+        <div>
+            {{ psd_div|safe }}
+        </div>
+
+        <div>
+            {{ new_swcc_div|safe }}
+        </div>
     </div>
 </body>
 </html>

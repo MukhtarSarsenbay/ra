@@ -1,7 +1,31 @@
 /* static/css/style.css */
 body {
   font-family: Arial, sans-serif;
+  background-color:white;
 }
+
+.custom-select {
+  width: 20%; /* Set the width to 100% for consistent sizing */
+  padding: 8px;  /*Reduce padding to make it smaller */
+  font-size: 14px; /* Adjust the font size to make it smaller */
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+}
+
+/* Styles for the dropdown arrow (you can adjust as needed) */
+.custom-select::after {
+  content: "\25BC"; /* Down-pointing triangle (you can change this) */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+}
+
 
 .container {
   max-width: 800px;
@@ -9,13 +33,26 @@ body {
   padding: 20px;
 }
 
+.input-container{
+    background-color:white;
+
+}
+
 h1 {
   text-align: center;
-  color: #008CBA;
+  color: #91c3b0;
 }
 
 input[type="number"] {
-  width: 100%;
+  width: 50%; /* Set the width to 100% for consistent sizing */
+  padding: 12px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+input[type="text"] {
+  width: 70%; /* Set the width to 100% for consistent sizing */
   padding: 12px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -24,12 +61,12 @@ input[type="number"] {
 }
 
 label {
-  color: #008CBA;
+  color: #91c3b0;
   font-weight: bold;
 }
 
 button {
-  background-color: #008CBA;
+  background-color: #91c3b0;
   color: white;
   padding: 14px 20px;
   margin: 10px 0;
@@ -66,5 +103,5 @@ button {
   text-align: center;
   margin-top: 10px;
   font-weight: bold;
-  color: #008CBA;
+  color: #91c3b0;
 }
