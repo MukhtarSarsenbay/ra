@@ -9,6 +9,13 @@ from scipy.signal import savgol_filter
 import pandas as pd
 import numpy as np
 from scipy.interpolate import make_interp_spline
+import numpy as np
+import pandas as pd
+import scipy
+#plotly dash
+import plotly.express as px
+from scipy import signal
+from scipy.interpolate import make_interp_spline
 
 matplotlib.use('Agg')  # Set non-interactive backend before importing pyplot, important
 
@@ -230,10 +237,15 @@ def input_values(request):
         #     name='Smoothed Best-fit'
         # )
 
+        smoothed_water_content = scipy.signal.savgol_filter(water_content, window_length=17, polyorder=10)
+
+        gfg=make_interp_spline(soil_suction, water_content, k=9 )
+        new_water_content=gfg(soil_suction)
 
 
-
-        swcc=go.Scatter(x=soil_suction,y=water_content,mode='lines', name='Smoothed Best-fit', line_shape='spline')
+        #swcc = go.Scatter(x=soil_suction, y=smoothed_water_content, mode='lines', name='Smoothed Best-fit', line_shape='spline')
+        #swcc=go.Scatter(x=soil_suction,y=signal.savgol_filter(water_content,17,13),mode='lines', name='Smoothed Best-fit', line_shape='spline',trendline_options=dict(frac=0.1))#9-11 are good numbers#17 is max for windows
+        swcc = go.Scatter(x=soil_suction, y=new_water_content, mode='lines', name='Best-fit')
         swcc_trace = go.Scatter(x=soil_suction, y=water_content, mode='lines', name='Best-fit')
         measured_trace = go.Scatter(x=soil_suction, y=tetta_s, mode='markers', name='Measured Data')
         swcc_layout = go.Layout(
@@ -317,13 +329,6 @@ def input_values(request):
         ),
         ]
 
-  
-
-
-
-
-
-        #Graph 4
         new_swcc_layout = go.Layout(
         title='New Soil-Water Characteristics Curve',
         xaxis=dict(
@@ -358,7 +363,7 @@ def input_values(request):
 
 
         # Graph 5
-        psd_trace_smooth=go.Scatter(x=pore_radius, y=derivation, mode='lines', name='Smooth PSD',line_shape='spline')
+        psd_trace_smooth=go.Scatter(x=pore_radius, y=derivation, mode='lines', name='Smooth PSD',line_shape="spline")
         psd_trace = go.Scatter(x=pore_radius, y=derivation, mode='lines', name='PSD')
         psd_layout = go.Layout(
             title='Pore-Size Distribution',
