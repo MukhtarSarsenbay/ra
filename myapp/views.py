@@ -237,15 +237,15 @@ def input_values(request):
         #     name='Smoothed Best-fit'
         # )
 
-        smoothed_water_content = scipy.signal.savgol_filter(water_content, window_length=17, polyorder=10)
+        #smoothed_water_content = scipy.signal.savgol_filter(water_content, window_length=17, polyorder=10)
 
-        gfg=make_interp_spline(soil_suction, water_content, k=9 )
-        new_water_content=gfg(soil_suction)
+        # gfg=make_interp_spline(soil_suction, water_content, k=9 )
+        # new_water_content=gfg(soil_suction)
 
 
         #swcc = go.Scatter(x=soil_suction, y=smoothed_water_content, mode='lines', name='Smoothed Best-fit', line_shape='spline')
         #swcc=go.Scatter(x=soil_suction,y=signal.savgol_filter(water_content,17,13),mode='lines', name='Smoothed Best-fit', line_shape='spline',trendline_options=dict(frac=0.1))#9-11 are good numbers#17 is max for windows
-        swcc = go.Scatter(x=soil_suction, y=new_water_content, mode='lines', name='Best-fit')
+        #swcc = go.Scatter(x=soil_suction, y=new_water_content, mode='lines', name='Best-fit')
         swcc_trace = go.Scatter(x=soil_suction, y=water_content, mode='lines', name='Best-fit')
         measured_trace = go.Scatter(x=soil_suction, y=tetta_s, mode='markers', name='Measured Data')
         swcc_layout = go.Layout(
@@ -276,7 +276,7 @@ def input_values(request):
             plot_bgcolor='#f7f6f5',  # Set the background color to white
             paper_bgcolor='white',  # Set the paper (bdtick=0.1rder) color to white
         )
-        swcc_fig = go.Figure(data=[swcc_trace, measured_trace,swcc], layout=swcc_layout)
+        swcc_fig = go.Figure(data=[swcc_trace, measured_trace], layout=swcc_layout)
         swcc_div = swcc_fig.to_html(full_html=False)
 
 
