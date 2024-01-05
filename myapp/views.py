@@ -418,11 +418,24 @@ def input_values(request):
         'new_swcc_div':new_swcc_div,
         'swcc_div1':swcc_div1,
         }
+        # return render(request, 'myapp/input_values.html', context)
         return render(request, 'myapp/input_values.html', context)
     else:
+        #return render(request, 'myapp/input_values.html')
         return render(request, 'myapp/input_values.html')
 
-def show_graph(request):
+def show_graph (request):
+    # return render(request, 'myapp/input_values.html')
     return render(request, 'myapp/input_values.html')
 
 
+
+def main_page(request):
+    return render(request, 'myapp/main_page.html')
+
+
+def dashnoard(request):
+    return render(request, 'dashboard/index.html')
+
+def test(request):
+    return render(request, 'myapp/test.html')

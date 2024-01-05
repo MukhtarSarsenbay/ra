@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_page_style.css' %}">
+</head>
+
+<body>
+    <h1>Welcome to Sensor Dashboard Mainpage</h1>
+    <div class="experiment-buttons">
+        <a href="graph"><button class="experiment-button">Start an experiment</button></a>
+    <!-- Add other buttons and links as needed -->
+        <button class="experiment-button">Keller Pressure</button>
+        <button class="experiment-button">Series 35X</button>
+    </div>
+    <div class="experiment-buttons">
+        <button class="experiment-button">Manage A</button>
+        <button class="experiment-button">Manage Experiments</button>
+        <button class="experiment-button">OHAUS Precision Balance</button>
+    </div>
+    <div class="experiment-buttons">
+        <button class="experiment-button">PR2202</button>
+        <button class="experiment-button">Development</button>
+        <button class="experiment-button">Settings</button>
+    </div>
+    <div class="experiment-buttons">
+        <button class="experiment-button">RK520-01</button>
+        <button class="experiment-button">Soil Water Suction</button>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" type="text/css" href="{% static 'css/test.css' %}">
+    <title>Sensor Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Sensor Dashboard</h1>
+    </header>
+
+    <section class="buttons">
+        <button class="start">Start an experiment</button>
+        <button class="manage">Manage Experiments</button>
+    </section>
+
+    <section class="sensor">
+        <h2>Keller Pressure</h2>
+        <h3>Series 35X</h3>
+    </section>
+
+    <section class="devices">
+        <div class="device">
+            <h2>OHAUS Precision</h2>
+            <h3>Balance PR2202</h3>
+        </div>
+        <div class="device">
+            <h2>Soil Water</h2>
+            <h3>Suction</h3>
+        </div>
+    </section>
+
+    <section class="development">
+        <h2>Development</h2>
+        <button class="settings">Settings</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2022 Sensor Dashboard. All rights reserved.</p>
+    </footer>
+</body>
+</html>

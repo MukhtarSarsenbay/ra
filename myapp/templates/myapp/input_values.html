@@ -1,13 +1,75 @@
-{% load static %}  <!-- Make sure to load the static template tag -->
+{% load static %} <!-- Make sure to load the static template tag -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Input Values</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2b2b2b;
+            color: #fff;
+        }
+
+        header {
+            background-color: #1e1e1e;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .graph {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .graph img {
+            max-width: 45%;
+            border-radius: 5px;
+        }
+
+        .graph p {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .input-values, .wanted-values, .total-error {
+            margin-top: 20px;
+        }
+
+        .input-values h2, .wanted-values h2, .total-error h2 {
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+
+        .input-values p, .wanted-values p, .total-error p {
+            margin: 10px 0;
+        }
+
+        .swcc-div, .psd-div {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+
+    <header>
+        <h1>Dashboard</h1>
+    </header>
+
     <div class="container">
-        <h1>Input Values</h1>
+
         <form method="post" class="input-form">
             {% csrf_token %}
 
@@ -49,8 +111,7 @@
         </form>
 
         {% if water_content_image and derivation_image %}
-            <h2>Graphs</h2>
-            <div class="graphs-container">
+            <div class="graph">
                 <div class="graph">
                     <img src="{{ water_content_image }}" alt="Water Content Graph">
                     <p>Water Content Graph</p>
@@ -62,7 +123,6 @@
             </div>
         {% endif %}
 
-        <h1>Output Graph</h1>
         <div class="input-values">
             <h2>Input Values:</h2>
             <p>Value of 'a': {{ a }}</p>
@@ -71,7 +131,7 @@
             <p>Value of 'soil_suction_r': {{ soil_suction_r }}</p>
         </div>
 
-        <div class="input-values">
+        <div class="total-error">
             <h2>Total error</h2>
             <p>Value of 'error_sum': {{ error_sum }}</p>
         </div>
@@ -84,21 +144,22 @@
             <p>new ': {{ optimal_soil_suction_r }}</p>
         </div>
 
-        <div>
+        <div class="swcc-div">
             {{ swcc_div1|safe }}
         </div>
 
-        <div>
+        <div class="swcc-div">
             {{ swcc_div|safe }}
         </div>
 
-        <div>
+        <div class="psd-div">
             {{ psd_div|safe }}
         </div>
 
-        <div>
+        <div class="new-swcc-div">
             {{ new_swcc_div|safe }}
         </div>
+
     </div>
 </body>
 </html>
