@@ -1,107 +1,66 @@
-/* static/css/style.css */
-body {
-  font-family: Arial, sans-serif;
-  background-color:white;
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2b2b2b;
+            color: #fff;
+        }
 
-.custom-select {
-  width: 20%; /* Set the width to 100% for consistent sizing */
-  padding: 8px;  /*Reduce padding to make it smaller */
-  font-size: 14px; /* Adjust the font size to make it smaller */
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: Arial, sans-serif;
-}
+        header {
+            background-color: #1e1e1e;
+            padding: 10px;
+            text-align: center;
+        }
 
-/* Styles for the dropdown arrow (you can adjust as needed) */
-.custom-select::after {
-  content: "\25BC"; /* Down-pointing triangle (you can change this) */
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  font-size: 14px;
-  pointer-events: none;
-}
+        .container {
+            max-width: 600px; /* Adjust the width as needed */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
 
+        .input-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
+        .input-container {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            background-color: #444; /* Dark background color */
+            padding: 10px; /* Padding for a more minimalistic look */
+            border-radius: 5px;
+        }
 
-.input-container{
-    background-color:white;
+        .input-container label {
+            margin-right: 10px;
+            color: #fff; /* Label text color */
+        }
 
-}
+        .input-container select, .input-container input {
+            flex: 1;
+            padding: 8px; /* Adjust padding for better input appearance */
+            border: none;
+            border-radius: 3px;
+            background-color: #555; /* Input background color */
+            color: #fff; /* Input text color */
+            margin: 0; /* Remove default margin */
+        }
 
-h1 {
-  text-align: center;
-  color: #91c3b0;
-}
+        button {
+            padding: 10px;
+            background-color: #1e1e1e;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
 
-input[type="number"] {
-  width: 50%; /* Set the width to 100% for consistent sizing */
-  padding: 12px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-input[type="text"] {
-  width: 70%; /* Set the width to 100% for consistent sizing */
-  padding: 12px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-label {
-  color: #91c3b0;
-  font-weight: bold;
-}
-
-button {
-  background-color: #91c3b0;
-  color: white;
-  padding: 14px 20px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.button-container {
-  text-align: center;
-}
-
-.graphs-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.graph {
-  width: 45%;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 2px 2px 5px #ccc;
-}
-
-.graph img {
-  width: 100%;
-  height: auto;
-}
-
-.graph p {
-  text-align: center;
-  margin-top: 10px;
-  font-weight: bold;
-  color: #91c3b0;
-}
+        button:hover {
+            background-color: #444;
+        }

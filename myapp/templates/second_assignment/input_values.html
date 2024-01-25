@@ -85,11 +85,10 @@
             {% csrf_token %}
 
             <div class="input-container">
-                <label for="valuesSelect">Select:</label>
+                <label for="valuesSelect">Suction:</label>
                 <select id="valuesSelect" name="values" class="custom-select">
-                    <option value="">Gravimetric Water Content:</option>
                     <option value="values">Volumetric Water Content:</option>
-                    <option value="">Degree of Saturation:</option>
+
                 </select>
                 <input type="text" maxlength="1000" minlength="1" name="values" id="values" required>
             </div>
@@ -112,11 +111,6 @@
             <div class="input-container">
                 <label for="m">m:</label>
                 <input type="number" name="m" id="m" step="any" required>
-            </div>
-
-            <div class="input-container">
-                <label for="soil_suction_r">Ψr:</label>
-                <input type="number" name="soil_suction_r" id="soil_suction_r" step="any" required>
             </div>
 
             <button type="submit">Submit</button>

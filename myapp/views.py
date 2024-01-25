@@ -419,7 +419,7 @@ def input_values(request):
         'swcc_div1':swcc_div1,
         }
         # return render(request, 'myapp/input_values.html', context)
-        return render(request, 'myapp/input_values.html', context)
+        return render(request, 'myapp/output_graph.html', context)
     else:
         #return render(request, 'myapp/input_values.html')
         return render(request, 'myapp/input_values.html')
@@ -428,6 +428,320 @@ def show_graph (request):
     # return render(request, 'myapp/input_values.html')
     return render(request, 'myapp/input_values.html')
 
+
+def second_formula(request):
+    if request.method == 'POST':
+        # limitation of quantity
+        vol_water = []
+        soil_suction = []
+        # taking values directly from excel
+
+        vol_wat_values = request.POST['values']
+        raw_values = vol_wat_values.strip().split(' ')
+
+        vol_water = []
+        for raw_value in raw_values:
+            if raw_value:
+                # Replace comma with dot and convert to float
+                cleaned_value = raw_value.replace(",", ".")
+                vol_water.append(float(cleaned_value))
+
+        # Now, vol_wat_values should be a list of floats
+        vol_wat_values = vol_water
+
+        # getting inputs and values
+        a = float(request.POST.get('a', 0.1))
+        n = float(request.POST.get('n', 0.1))
+        m = float(request.POST.get('m', 0.1))
+        e = math.exp(1)
+
+        # getting from excel too
+        suc_values1 = request.POST['values1']
+        raw_values = suc_values1.strip().split(' ')
+        for raw_value in raw_values:
+            if raw_value:
+                cleaned_value = raw_value.replace(",", ".")
+                soil_suction.append(float(cleaned_value))
+        cleaned_values_string = ' '.join(map(str, soil_suction))
+        suc_values1 = cleaned_values_string
+        suc_values1 = [float(cleaned_values_string) for cleaned_values_string in raw_values if cleaned_values_string]
+
+        water_content = []
+        pore_radius = []
+        derivation = []
+        base_soil_suction = [0.01, 0.66, 4, 11, 16, 66, 148, 250, 400, 650, 800, 1260, 1410, 2070, 2950, 4680, 7630, 12260]
+        base_thetha_s = []
+
+        corr_fact = 1
+        #volumentric_tetta_s
+
+
+        # TODO: matric suction find
+        def main_formula(suc_value, vol_wat_values, a, n, m):
+            ans = float(vol_wat_values) / float(((math.log(e + (float(suc_value) / a) ** n, e)) ** m))
+            return ans
+
+        swcc_trace = go.Scatter(
+            x=soil_suction,
+            y=water_content,
+            mode='lines',
+            name='Best-fit'
+        )
+
+        # Create a trace for measured data
+        measured_trace = go.Scatter(
+            x=soil_suction,
+            y=vol_water,
+            mode='markers',
+            name='Measured Data'
+        )
+
+        # Define the layout for the plot
+        swcc_layout = go.Layout(
+            title='Soil-Water Characteristics Curve',
+            xaxis=dict(
+                type='log',
+                title='Soil Suction (kPa)',
+                showgrid=True,
+                gridwidth=0.4,
+                gridcolor='grey',
+                dtick='auto',
+                linewidth=1,
+                linecolor='black',
+                zeroline=True,
+                zerolinecolor="grey"
+            ),
+            yaxis=dict(
+                title='Volumetric Water Content (w)',
+                showgrid=True,
+                gridwidth=0.4,
+                gridcolor='grey',
+                dtick=0.1,
+                linewidth=1,
+                linecolor='black',
+                zeroline=True,
+                zerolinecolor="grey",
+                rangemode='tozero',
+            ),
+            plot_bgcolor='#f7f6f5',
+            paper_bgcolor='white'
+        )
+
+        # Create a figure with the defined data and layout
+        # swcc_fig = go.Figure(data=[swcc_trace, measured_trace], layout=swcc_layout)
+        swcc_fig = go.Figure(data=[swcc_trace, measured_trace], layout=swcc_layout)
+
+        # Convert the figure to an HTML div element
+        swcc_div1 = swcc_fig.to_html(full_html=False)
+
+        # Define the objective function for optimization
+        def objective(variables):
+            a, n, m = variables
+            global error_sum
+            error_sum = 0
+            for i in range(len(suc_values1)):
+                predicted_water_content = main_formula(suc_values1[i], vol_wat_values[0], a, n, m)
+                error = abs(vol_wat_values[i] - predicted_water_content)
+                if error >= 0.0001:
+                    error_sum += error  # - >even worse
+            for i in range(len(suc_values1)):
+                predicted_water_content = main_formula(suc_values1[i], vol_wat_values[0], a, n, m)
+                error = ((vol_wat_values[i] - predicted_water_content) / vol_wat_values[i]) ** 2
+                print(error)
+                if error > 0.1:
+                    continue
+            error_sum += error
+
+            return error_sum
+
+        # Perform optimization
+
+        # Set initial values for optimization,
+        x0 = [0.1, 0.1, 0.1]
+        bounds = [(32, 159), (0.525, 0.93), (1, 2.2)]
+
+        # Perform optimization
+        result = minimize(objective, x0, method='SLSQP', bounds=bounds, options={'maxiter': 10000, 'ftol': 1e-10})
+        # result = differential_evolution(objective, bounds, maxiter=1000, tol=1e-8)
+
+        optimal_a, optimal_n, optimal_m = result.x
+
+        for value in range(len(base_soil_suction)):
+            base_thetha_s.append(main_formula(base_soil_suction[value], vol_wat_values[0], optimal_a, optimal_n, optimal_m))
+        # to save input values
+        a1 = a
+        n1 = n
+        m1 = m
+
+        # to draw a new graph
+        a = optimal_a
+        n = optimal_n
+        m = optimal_m
+        water_content.clear()
+        derivation.clear()
+        pore_radius.clear()
+
+        swcc_trace = go.Scatter(x=soil_suction, y=water_content, mode='lines', name='Best-fit')
+        measured_trace = go.Scatter(x=soil_suction, y=vol_wat_values, mode='markers', name='Measured Data')
+        swcc_layout = go.Layout(
+            title='Soil-Water Characteristics Curve',
+            xaxis=dict(
+                type='log',
+                title='Soil Suction (kPa)',
+                showgrid=True,  # Show the grid lines
+                gridwidth=0.4,  # Set the grid line width
+                gridcolor='grey',  # Set the grid line color to black
+                dtick='auto',
+                linewidth=1, linecolor='black',
+                zeroline=True,
+                zerolinecolor="grey",
+            ),
+            yaxis=dict(
+                title='Volumetric Water Content (w)',
+                showgrid=True,  # Show the grid lines
+                gridwidth=0.4,  # Set the grid line width
+                gridcolor='grey',  # Set the grid line color to grey
+                dtick='0.1',  # Automatically determine the spacing of grid lines
+                linewidth=1,
+                linecolor='black',
+                zeroline=True,
+                zerolinecolor="grey",
+                rangemode='tozero',
+            ),
+            plot_bgcolor='#f7f6f5',  # Set the background color to white
+            paper_bgcolor='white',  # Set the paper (bdtick=0.1rder) color to white
+        )
+        swcc_fig = go.Figure(data=[swcc_trace, measured_trace], layout=swcc_layout)
+        swcc_div = swcc_fig.to_html(full_html=False)
+
+        # Graph 3
+        new_swcc = go.Scatter(x=base_soil_suction, y=base_thetha_s, mode='lines', name='Smoothed Best-fit Extended',
+                              line_shape='spline')
+        new_swcc_trace = go.Scatter(x=base_soil_suction, y=base_thetha_s, mode='lines', name='Best-fit Extended')
+        new_measured_trace = go.Scatter(x=soil_suction, y=vol_wat_values, mode='markers', name='Measured Data')
+        optimal_a_text = f"a: {round(optimal_a, 2)}"
+        optimal_n_text = f"n: {round(optimal_n, 2)}"
+        optimal_m_text = f"m: {round(optimal_m, 2)}"
+        annotations = [
+            dict(
+                x=1.0,  # Adjust the x position to move the annotation to the right
+                y=0.85,  # Adjust the y position to move the annotation upwards
+                xref='paper',
+                yref='paper',
+                text=optimal_a_text,
+                showarrow=False,
+                font=dict(size=14),  # Increase the font size
+            ),
+            dict(
+                x=1.0,  # Adjust the x position
+                y=0.80,  # Adjust the y position
+                xref='paper',
+                yref='paper',
+                text=optimal_n_text,
+                showarrow=False,
+                font=dict(size=14),  # Increase the font size
+            ),
+            dict(
+                x=1.0,  # Adjust the x position
+                y=0.75,  # Adjust the y position
+                xref='paper',
+                yref='paper',
+                text=optimal_m_text,
+                showarrow=False,
+                font=dict(size=14),  # Increase the font size
+            ),
+        ]
+
+        new_swcc_layout = go.Layout(
+            title='New Soil-Water Characteristics Curve',
+            xaxis=dict(
+                type='log',
+                title='Soil Suction (kPa)',
+                showgrid=True,  # Show the grid lines
+                gridwidth=0.4,  # Set the grid line width
+                gridcolor='grey',  # Set the grid line color to black
+                dtick='auto',
+                linewidth=1, linecolor='black',
+                zeroline=True,
+                zerolinecolor="grey",
+            ),
+            yaxis=dict(
+                title='Volumetric Water Content (w)',
+                showgrid=True,  # Show the grid lines
+                gridwidth=0.4,  # Set the grid line width
+                gridcolor='grey',  # Set the grid line color to grey
+                dtick='0.1',  # Automatically determine the spacing of grid lines
+                linewidth=1,
+                linecolor='black',
+                zeroline=True,
+                zerolinecolor="grey",
+                rangemode='tozero',
+            ),
+            plot_bgcolor='#f7f6f5',  # Set the background color to white
+            paper_bgcolor='white',  # Set the paper (bdtick=0.1rder) color to white
+            annotations=annotations
+        )
+        new_swcc_fig = go.Figure(data=[new_swcc_trace, new_measured_trace, new_swcc], layout=new_swcc_layout)
+        new_swcc_div = new_swcc_fig.to_html(full_html=False)
+
+        # Graph 5
+        psd_trace_smooth = go.Scatter(x=pore_radius, y=derivation, mode='lines', name='Smooth PSD', line_shape="spline")
+        psd_trace = go.Scatter(x=pore_radius, y=derivation, mode='lines', name='PSD')
+        psd_layout = go.Layout(
+            title='Pore-Size Distribution',
+            xaxis=dict(
+                type='log',
+                title='Pore Radius (mm)',
+                showgrid=True,
+                gridwidth=0.4,
+                gridcolor='grey',
+                dtick='auto',
+                linewidth=1,
+                linecolor='black',  # Change the x-axis color to black
+                zeroline=True,  # Start the x-axis from 0
+                zerolinecolor='grey',  # Change the c
+                # olor of the zero line
+            ),
+            yaxis=dict(
+                title='Derivation',
+                showgrid=True,
+                gridwidth=0.4,
+                gridcolor='grey',
+                dtick=0.1,  # Change dtick to a specific value
+                linewidth=1,
+                linecolor='black',
+
+                zeroline=True,
+                zerolinecolor='grey',
+                rangemode='tozero'
+            ),
+            plot_bgcolor='#f7f6f5',
+            paper_bgcolor='white',
+        )
+
+        psd_fig = go.Figure(data=[psd_trace_smooth], layout=psd_layout)
+        psd_div = psd_fig.to_html(full_html=False)
+
+        context = {
+            'tetta_s': vol_wat_values,
+            'soil_suction': suc_values1,
+            'a': a1,
+            'n': n1,
+            'm': m1,
+            'optimal_a': round(optimal_a, 2),
+            'optimal_n': round(optimal_n, 2),
+            'optimal_m': round(optimal_m, 2),
+            'error_sum': error_sum,
+            'swcc_div': swcc_div,  # Pass the Soil-Water Characteristics Curve as HTML div
+            'psd_div': psd_div,  # Pass the Pore-Size Distribution as HTML div
+            'new_swcc_div': new_swcc_div,
+            'swcc_div1': swcc_div1,
+        }
+        # return render(request, 'myapp/input_values.html', context)
+        return render(request, 'second_assignment/output_graph.html', context)
+    else:
+        # return render(request, 'myapp/input_values.html')
+        return render(request, 'second_assignment/input_values.html')
 
 
 def main_page(request):

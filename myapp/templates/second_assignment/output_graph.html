@@ -17,11 +17,7 @@
             {% csrf_token %}
 
             <div class="input-container">
-                <select id="valuesSelect" name="values" class="custom-select">
-                    <option value="">Gravimetric Water Content:</option>
-                    <option value="values">Volumetric Water Content:</option>
-                    <option value="">Degree of Saturation:</option>
-                </select>
+                <label for="values">Volume water content:</label>
                 <input type="text" maxlength="1000" minlength="1" name="values" id="values" required>
             </div>
 
@@ -45,10 +41,6 @@
                 <input type="number" name="m" id="m" step="any" required>
             </div>
 
-            <div class="input-container">
-                <label for="soil_suction_r">Ψr:</label>
-                <input type="number" name="soil_suction_r" id="soil_suction_r" step="any" required>
-            </div>
 
             <button type="submit">Submit</button>
         </form>
@@ -71,7 +63,6 @@
             <p>Value of 'a': {{ a }}</p>
             <p>Value of 'n': {{ n }}</p>
             <p>Value of 'm': {{ m }}</p>
-            <p>Value of 'soil_suction_r': {{ soil_suction_r }}</p>
         </div>
 
         <div class="total-error">
@@ -84,7 +75,6 @@
             <p>new a: {{ optimal_a }}</p>
             <p>new n': {{ optimal_n }}</p>
             <p>new m: {{ optimal_m }}</p>
-            <p>new ': {{ optimal_soil_suction_r }}</p>
         </div>
 
         <div class="swcc-div">
